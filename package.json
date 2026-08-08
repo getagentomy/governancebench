@@ -1,0 +1,42 @@
+{
+  "name": "governancebench",
+  "version": "1.2.0",
+  "description": "Open-source governance benchmark for AI agent platforms. 5 core dimensions (224 scenarios) + 10 domain-specific suites (175 scenarios).",
+  "main": "./lib/runner.mjs",
+  "license": "Apache-2.0",
+  "bin": {
+    "governancebench": "bin/governancebench.mjs"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "governance",
+    "benchmark",
+    "ai-agents",
+    "security",
+    "compliance",
+    "audit"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/getagentomy/governancebench.git"
+  },
+  "homepage": "https://github.com/getagentomy/governancebench",
+  "author": "Agentomy <governance@agentomy.com>",
+  "dependencies": {
+    "commander": "14.0.3"
+  },
+  "files": [
+    "bin/",
+    "suites/",
+    "lib/",
+    "README.md",
+    "LICENSE",
+    "!**/AGENTS.md"
+  ],
+  "bugs": {
+    "url": "https://github.com/getagentomy/governancebench/issues"
+  }
+}
