@@ -6,7 +6,7 @@ The open governance benchmark for AI agent platforms.
 
 **GovernanceBench measures whether a governance platform actually enforces what it claims.**
 
-It tests any governance API across 5 core dimensions and 7 domain-specific extended suites with 333 behavioral scenarios. No source access required. Tests run against live HTTP endpoints.
+It tests any governance API across 6 core dimensions and 12 domain-specific extended suites with 405 behavioral scenarios. No source access required. Tests run against live HTTP endpoints.
 
 ---
 
