@@ -22,7 +22,7 @@
  *
  * Agentomy expected score: 8/10 PASS, 2/10 PARTIAL (ASI-04, ASI-09). ASI-09 strengthened
  * 2026-05-27 with input-layer prompt-injection detection on untrusted channels + financial
- * new-recipient step-up (scored: OWASP-ASI-09b/c, live-verified 224/224). ASI-09 retains its
+ * new-recipient step-up (scored: OWASP-ASI-09b/c, live-verified 232/232). ASI-09 retains its
  * PARTIAL label BY DESIGN: the injection->financial-action vector is now covered and scored,
  * but general conversational/content moderation stays out of scope (Agentomy is a governance
  * layer, not a content filter). Honest non-overclaim -- not relabeled FULL.

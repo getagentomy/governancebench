@@ -4,7 +4,7 @@
  * GovernanceBench CLI
  *
  * The open governance benchmark for AI agent platforms.
- * Tests any governance platform against 4 dimensions: Authorization,
+ * Tests any governance platform against 6 dimensions: Authorization,
  * Auditability, Override, and Behavioral Monitoring.
  *
  * Usage:
@@ -59,7 +59,7 @@ function saveLastRun(result) {
   }
 }
 
-const VALID_SUITES = ['all', 'authorization', 'audit', 'override', 'behavioral', 'owasp', 'override-integrity', 'rpa-governance', 'algo-trading', 'medical-device', 'av-fleet', 'industrial-iot', 'breach-reproduction', 'cloud-infrastructure', 'skill-governance', 'ipi', 'message-governance', 'substrate-governance'];
+const VALID_SUITES = ['all', 'authorization', 'audit', 'override', 'behavioral', 'owasp', 'override-integrity', 'rpa-governance', 'algo-trading', 'medical-device', 'av-fleet', 'industrial-iot', 'breach-reproduction', 'cloud-infrastructure', 'skill-governance', 'ipi', 'message-governance', 'substrate-governance', 'agent-collective'];
 const VALID_ADAPTERS = ['agentomy', 'generic', 'microsoft-agt', 'openai-agentkit', 'n8n'];
 
 const program = new Command();
@@ -68,7 +68,7 @@ program
   .name('governancebench')
   .description(
     'GovernanceBench -- The open governance benchmark for AI agent platforms.\n' +
-  'Tests any governance API across 5 dimensions: Authorization, Auditability, Override, Behavioral, OWASP Coverage.'
+  'Tests any governance API across 6 dimensions: Authorization, Auditability, Override, Behavioral, OWASP Coverage, Message Governance.'
   )
   .version(version, '-v, --version', 'Print GovernanceBench version')
   .addHelpText('after', `
@@ -93,7 +93,7 @@ Examples:
 Scoring:
   Each dimension is scored 0-100 based on pass/fail of scoreable scenarios.
   Skipped scenarios (endpoint not implemented) are excluded from scoring.
-  Overall score is the equally weighted average of all 5 dimensions.
+  Overall score is the equally weighted average of all 6 dimensions.
 
   Excellent: 90+  Good: 75+  Adequate: 60+  Insufficient: 40+  Critical: <40
 

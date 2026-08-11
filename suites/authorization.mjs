@@ -141,10 +141,10 @@ const tierEscalation = [
     suite: 'authorization',
     async test(target, adapter) {
       // 'quarantine' is NOT a tier-3 action -- it is not in ANY tier's permission set
-      // (Strategist holds halt/override/admin); it is an operator endpoint, not an agent action.
+      // (G4X holds halt/override/admin); it is an operator endpoint, not an agent action.
       // This scenario therefore asserted a premise the tier model never supported and
-      // could only ever pass via a permissive escape. 'deploy' is genuinely Operator-exclusive
-      // (absent from Builder), which is exactly what "a Tier-3 action" means here.
+      // could only ever pass via a permissive escape. 'deploy' is genuinely G3X-exclusive
+      // (absent from G2X), which is exactly what "a Tier-3 action" means here.
       // The agent id is unique per run: bench traffic triggers behavioural
       // auto-quarantine, and a fixed id inherited that state from earlier scenarios, so
       // the result depended on run order rather than on tier authorization.
@@ -448,7 +448,7 @@ const crossAgent = [
     async test(target, adapter) {
       // An unknown agent arriving with valid API key credentials is auto-registered
       // at the lowest tier. This is correct behavior: the API key holder is
-      // authorized to introduce agents. The agent should be assigned Analyst (Analyst)
+      // authorized to introduce agents. The agent should be assigned Analyst (G1X)
       // tier, not the tier it claims in the request body.
       const r = await post(target, (adapter?.endpoints?.authorize?.path || '/api/claw/authorize'),
         (adapter?.endpoints?.authorize?.body

@@ -84,19 +84,20 @@ npx governancebench blind --targets targets.json --format json --output results.
 
 ## How Scoring Works
 
-GovernanceBench measures 5 dimensions:
+GovernanceBench measures 6 dimensions:
 
 1. **Authorization** -- Are tier-based permissions enforced server-side? Can escalation be injected via request body?
 2. **Auditability** -- Is every governance event recorded, hash-linked, exportable, and tamper-evident?
 3. **Override** -- Can an authorized operator halt all agents immediately? Is unauthorized halt blocked?
 4. **Behavioral** -- Is anomalous agent behavior detected, flagged, and quarantined automatically?
 5. **OWASP** -- Does the platform address OWASP Agentic Top 10 risks (ASI-01 through ASI-10)?
+6. **Message Governance** -- Are agent-to-agent messages governed as actions? Are instruction-override and capability-escalation payloads refused, is an encoded payload still caught, and does each decision carry the policy version it was made under?
 
 **Adapters** translate between GovernanceBench's normalized API and each platform's actual endpoints. Each adapter maps paths, HTTP methods, auth headers, and response parsing rules. You can use a built-in adapter or create your own with `--adapter generic --config ./my-adapter.json`.
 
 **Skipped, not failed -- but only for capabilities the platform never claimed.** Absence is judged against what the adapter DECLARES. If an adapter omits an endpoint or marks it `not_available`, scenarios that need it are skipped and excluded from scoring: a platform is never penalized for capabilities it does not claim to have. If the adapter DOES declare the endpoint, the platform is claiming that capability, and an endpoint that then 404s, 401s, or errors is a **failure**. A platform that advertises `/api/monitor/alerts` and does not serve it is broken, and the benchmark says so rather than quietly shrinking its own denominator.
 
-**Score reflects what is implemented, not what is missing.** If your platform implements 3 of 5 dimensions, your score is the average of those 3. The report clearly shows which dimensions were evaluated and which were skipped entirely.
+**Score reflects what is implemented, not what is missing.** If your platform implements 3 of 6 dimensions, your score is the average of those 3. The report clearly shows which dimensions were evaluated and which were skipped entirely.
 
 ---
 
@@ -269,9 +270,9 @@ An endpoint that returns 404 is skipped in scoring only when the active adapter 
 
 ## Test Suites
 
-GovernanceBench ships 17 suites organized into two tiers.
+GovernanceBench ships 18 suites organized into two tiers.
 
-### Core Dimensions (5 suites, 224 scenarios)
+### Core Dimensions (5 suites, 232 scenarios)
 
 The standard governance benchmark. These suites define the scored dimensions that produce the overall GovernanceBench rating.
 
@@ -283,7 +284,7 @@ The standard governance benchmark. These suites define the scored dimensions tha
 | behavioral | 58 | Anomaly detection, quarantine mechanics, false positive rate |
 | owasp | 15 | OWASP Agentic Top 10 coverage (ASI-01 through ASI-10) |
 
-### Extended Suites (12 suites, 175 scenarios)
+### Extended Suites (12 suites, 173 scenarios)
 
 Domain-specific governance evaluation. These suites test governance enforcement in vertical contexts. They run independently from core scoring and are selected with `--suite <name>`.
 
@@ -392,10 +393,11 @@ dimension_score = (passed / scoreable) x 100
 
 Skipped tests (endpoint returns 404) are excluded from both numerator and denominator.
 
-Overall score is the equally weighted average of all 5 dimensions:
+Overall score is the equally weighted average of all 6 dimensions:
 
 ```
-overall = (authorization + auditability + override + behavioral + owasp_normalized) / 5
+overall = (authorization + auditability + override + behavioral + owasp_normalized
+           + message_governance) / 6
 ```
 
 The OWASP dimension is also reported as a separate ASI count (e.g., 8/10) in the leaderboard.
