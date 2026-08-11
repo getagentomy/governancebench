@@ -1,6 +1,6 @@
 {
   "name": "governancebench",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "description": "Open-source governance benchmark for AI agent platforms. 6 core dimensions (232 scenarios) + 12 domain-specific suites (173 scenarios).",
   "main": "./lib/runner.mjs",
   "license": "Apache-2.0",
