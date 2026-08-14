@@ -1,5 +1,7 @@
 # GovernanceBench
 
+<sub>An open piece of **[Agentomy](https://agentomy.com)**, the governance layer for AI agents in regulated enterprises. See the others at [github.com/getagentomy](https://github.com/getagentomy).</sub>
+
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
 The open governance benchmark for AI agent platforms.
