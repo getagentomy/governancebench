@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="assets/brand/agentomy-logo-dark.svg" alt="Agentomy" width="320" />
+</div>
+
 # GovernanceBench
 
 <sub>An open piece of **[Agentomy](https://agentomy.com)**, the governance layer for AI agents in regulated enterprises. See the others at [github.com/getagentomy](https://github.com/getagentomy).</sub>
@@ -8,19 +12,48 @@ The open governance benchmark for AI agent platforms.
 
 **GovernanceBench measures whether a governance platform actually enforces what it claims.**
 
-It tests any governance API across 6 core dimensions and 12 domain-specific extended suites with 405 behavioral scenarios. No source access required. Tests run against live HTTP endpoints.
+It tests any governance API across 6 core dimensions and 13 extended and vertical suites: 428 behavioral scenarios in total (235 core, 193 extended) across 19 suites. No source access required. Tests run against live HTTP endpoints.
 
 ---
+
+## Responsible use
+
+**Run this only against systems you own or are explicitly authorized in writing to test.**
+
+This package generates adversarial traffic. It exists to measure whether a governance layer
+detects and refuses hostile behavior, which means it produces the hostile behavior in order to
+see what happens to it. Pointed at a system you do not control, that is an attack, and it may
+be a criminal offense under the U.S. Computer Fraud and Abuse Act and equivalent
+computer-misuse statutes elsewhere, regardless of intent or of what you find.
+
+Before you run it:
+
+- Confirm you own the target, or hold written authorization from the party that does.
+- Confirm your provider's terms permit testing (cloud and SaaS providers usually require
+  advance notice or explicit approval).
+- Expect side effects. Adversarial scenarios can trigger alerts, rate limits, account lockouts,
+  paging, and log volume, and can degrade a live service. Prefer a non-production target.
+- Do not use output from this package to attack, exploit, or gain access to third-party systems.
+
+Testing your own deployment needs no permission from us. Testing Agentomy-operated systems,
+including agentomy.com and our hosted APIs, requires our prior written authorization, write to
+security@agentomy.com. If you find a vulnerability in our systems, report it there and give us a
+reasonable chance to fix it before disclosure.
+
+The license grants you broad rights to use, modify and redistribute this software, and it
+disclaims all warranties and liability. It does not authorize you to access anyone else's
+systems, and nothing here creates an exception to any law. **You are solely responsible for what
+you point this at and for every consequence of doing so.**
 
 ## What GovernanceBench Measures
 
 Governance platforms make five core claims:
 
-1. **Authorization** -- Tier-based permissions are enforced server-side. Tier escalation via request body is impossible.
-2. **Auditability** -- Every governance event is recorded, hash-linked, exportable, and tamper-evident.
-3. **Override** -- An authorized operator can halt all governed agents immediately. Unauthorized halt is blocked.
-4. **Behavioral** -- Anomalous agent behavior is detected, flagged, and quarantined automatically.
-5. **OWASP Coverage** -- The platform addresses each of the OWASP Agentic Top 10 risks (ASI-01 through ASI-10).
+1. **Authorization**, Tier-based permissions are enforced server-side. Tier escalation via request body is impossible.
+2. **Auditability**, Every governance event is recorded, hash-linked, exportable, and tamper-evident.
+3. **Override**, An authorized operator can halt all governed agents immediately. Unauthorized halt is blocked.
+4. **Behavioral**, Anomalous agent behavior is detected, flagged, and quarantined automatically.
+5. **OWASP Coverage**, The platform addresses each of the OWASP Agentic Top 10 risks (ASI-01 through ASI-10).
 
 GovernanceBench verifies these claims by calling real API endpoints and checking real responses.
 
@@ -52,7 +85,7 @@ npx governancebench run --target https://your-governance-api.com
 npx governancebench run --target https://agt-endpoint.com --adapter microsoft-agt
 
 # 3. Score the reference implementation (Agentomy)
-# Start Docker with the admin token -- without it, auth tests return 401 and score is ~52/100
+# Start Docker with the admin token, without it, auth tests return 401 and score is ~52/100
 ADMIN_OVERRIDE_TOKEN=my-secret-token docker compose up -d
 npx governancebench run --target http://localhost:3000 --adapter agentomy --api-key agentomy_ak_my-secret-token
 ```
@@ -88,16 +121,16 @@ npx governancebench blind --targets targets.json --format json --output results.
 
 GovernanceBench measures 6 dimensions:
 
-1. **Authorization** -- Are tier-based permissions enforced server-side? Can escalation be injected via request body?
-2. **Auditability** -- Is every governance event recorded, hash-linked, exportable, and tamper-evident?
-3. **Override** -- Can an authorized operator halt all agents immediately? Is unauthorized halt blocked?
-4. **Behavioral** -- Is anomalous agent behavior detected, flagged, and quarantined automatically?
-5. **OWASP** -- Does the platform address OWASP Agentic Top 10 risks (ASI-01 through ASI-10)?
-6. **Message Governance** -- Are agent-to-agent messages governed as actions? Are instruction-override and capability-escalation payloads refused, is an encoded payload still caught, and does each decision carry the policy version it was made under?
+1. **Authorization**, Are tier-based permissions enforced server-side? Can escalation be injected via request body?
+2. **Auditability**, Is every governance event recorded, hash-linked, exportable, and tamper-evident?
+3. **Override**, Can an authorized operator halt all agents immediately? Is unauthorized halt blocked?
+4. **Behavioral**, Is anomalous agent behavior detected, flagged, and quarantined automatically?
+5. **OWASP**, Does the platform address OWASP Agentic Top 10 risks (ASI-01 through ASI-10)?
+6. **Message Governance**, Are agent-to-agent messages governed as actions? Are instruction-override and capability-escalation payloads refused, is an encoded payload still caught, and does each decision carry the policy version it was made under?
 
 **Adapters** translate between GovernanceBench's normalized API and each platform's actual endpoints. Each adapter maps paths, HTTP methods, auth headers, and response parsing rules. You can use a built-in adapter or create your own with `--adapter generic --config ./my-adapter.json`.
 
-**Skipped, not failed -- but only for capabilities the platform never claimed.** Absence is judged against what the adapter DECLARES. If an adapter omits an endpoint or marks it `not_available`, scenarios that need it are skipped and excluded from scoring: a platform is never penalized for capabilities it does not claim to have. If the adapter DOES declare the endpoint, the platform is claiming that capability, and an endpoint that then 404s, 401s, or errors is a **failure**. A platform that advertises `/api/monitor/alerts` and does not serve it is broken, and the benchmark says so rather than quietly shrinking its own denominator.
+**Skipped, not failed, but only for capabilities the platform never claimed.** Absence is judged against what the adapter DECLARES. If an adapter omits an endpoint or marks it `not_available`, scenarios that need it are skipped and excluded from scoring: a platform is never penalized for capabilities it does not claim to have. If the adapter DOES declare the endpoint, the platform is claiming that capability, and an endpoint that then 404s, 401s, or errors is a **failure**. A platform that advertises `/api/monitor/alerts` and does not serve it is broken, and the benchmark says so rather than quietly shrinking its own denominator.
 
 **Score reflects what is implemented, not what is missing.** If your platform implements 3 of 6 dimensions, your score is the average of those 3. The report clearly shows which dimensions were evaluated and which were skipped entirely.
 
@@ -109,6 +142,9 @@ GovernanceBench measures 6 dimensions:
 |---|---|---|---|---|
 | Agentomy | v0.31.0 | 100/100 | 2026-05-16 | results.json |
 | Microsoft AGT | v3.6.0 | 57/100 | 2026-05-17 | microsoft-agt-governancebench-results.json |
+| n8n (bare) | latest | 56/100 | 2026-06-18 | live adapter (`run --adapter n8n`) |
+
+n8n is an open-source workflow orchestrator, not a governance platform, included to show what a general-purpose runtime scores against the bar: 56/100 (Insufficient), live-measured through the adapter. The same n8n governed through Agentomy reaches 100/100. Run it yourself with `run --adapter n8n`. Microsoft Agent 365 (preview) received a documentation-review assessment (2 of 4 dimensions), not a full live score.
 
 ---
 
@@ -116,11 +152,11 @@ GovernanceBench measures 6 dimensions:
 
 **"Isn't this self-assessment?"**
 
-We scored Microsoft AGT at 57/100. If the benchmark was rigged, competitors would score zero, not fifty-seven. AGT scores 90/100 on Behavioral -- a self-serving benchmark would not give a competitor an A in any dimension. The benchmark tests HTTP endpoints with observable behavior. Anyone can run it and verify.
+We scored Microsoft AGT at 57/100. If the benchmark was rigged, competitors would score zero, not fifty-seven. AGT scores 90/100 on Behavioral, a self-serving benchmark would not give a competitor an A in any dimension. The benchmark tests HTTP endpoints with observable behavior. Anyone can run it and verify.
 
 **"My system scored 0/100"**
 
-That means your system has no governance API endpoints. This IS the score -- your agents are running without governance. There is no authorization layer, no audit trail, no kill switch, no anomaly detection. Get started: `npm install agentomy-agent`
+That means your system has no governance API endpoints. This IS the score, your agents are running without governance. There is no authorization layer, no audit trail, no kill switch, no anomaly detection. Get started: `npm install agentomy-agent`
 
 **"How do I create a custom adapter?"**
 
@@ -173,9 +209,9 @@ GovernanceBench ships four adapters:
 ### How adapters work
 
 An adapter is a JavaScript object that specifies:
-- `endpoints` -- path and HTTP method for each GovernanceBench operation
-- `auth` -- how to inject API credentials (header key + environment variable name)
-- `parseResponse` -- functions that extract normalized values from each platform's response schema
+- `endpoints`, path and HTTP method for each GovernanceBench operation
+- `auth`, how to inject API credentials (header key + environment variable name)
+- `parseResponse`, functions that extract normalized values from each platform's response schema
 
 The runner loads the adapter, injects auth headers automatically from environment variables, and marks endpoints defined as `not_available` as skipped (404 equivalent) without making a network call.
 
@@ -210,7 +246,7 @@ Create a JSON file:
 }
 ```
 
-Omit any endpoint to use the Agentomy default path. Set `"method": "not_available"` for endpoints your platform does not implement -- those scenarios will skip automatically.
+Omit any endpoint to use the Agentomy default path. Set `"method": "not_available"` for endpoints your platform does not implement, those scenarios will skip automatically.
 
 Run it:
 
@@ -266,15 +302,15 @@ GovernanceBench is target-agnostic. It expects these REST endpoints:
 | `/api/monitor/alerts` | GET | Active anomaly alerts |
 | `/api/anomaly/status` | GET | Anomaly detection system status |
 
-An endpoint that returns 404 is skipped in scoring only when the active adapter does not declare it -- that is how platforms implementing a subset of the API avoid being penalized. When the adapter declares an endpoint, a 404 from it is scored as a failure. See `lib/endpoint-contract.mjs`.
+An endpoint that returns 404 is skipped in scoring only when the active adapter does not declare it, that is how platforms implementing a subset of the API avoid being penalized. When the adapter declares an endpoint, a 404 from it is scored as a failure. See `lib/endpoint-contract.mjs`.
 
 ---
 
 ## Test Suites
 
-GovernanceBench ships 18 suites organized into two tiers.
+GovernanceBench ships 19 suites organized into two tiers.
 
-### Core Dimensions (5 suites, 232 scenarios)
+### Core Dimensions (6 suites, 235 scenarios)
 
 The standard governance benchmark. These suites define the scored dimensions that produce the overall GovernanceBench rating.
 
@@ -286,7 +322,7 @@ The standard governance benchmark. These suites define the scored dimensions tha
 | behavioral | 58 | Anomaly detection, quarantine mechanics, false positive rate |
 | owasp | 15 | OWASP Agentic Top 10 coverage (ASI-01 through ASI-10) |
 
-### Extended Suites (12 suites, 173 scenarios)
+### Extended Suites (13 of them, 193 scenarios)
 
 Domain-specific governance evaluation. These suites test governance enforcement in vertical contexts. They run independently from core scoring and are selected with `--suite <name>`.
 
@@ -420,7 +456,7 @@ The OWASP dimension is also reported as a separate ASI count (e.g., 8/10) in the
 
 ## Interpreting Results
 
-A **skipped** scenario means the active adapter does not declare the endpoint the scenario needs, so the capability is genuinely absent on this target. Skipped scenarios are not failures -- they indicate which governance capabilities the platform does or does not implement.
+A **skipped** scenario means the active adapter does not declare the endpoint the scenario needs, so the capability is genuinely absent on this target. Skipped scenarios are not failures, they indicate which governance capabilities the platform does or does not implement.
 
 A **failed** scenario means the platform claims the capability but did not deliver: either the adapter declares the endpoint and it did not answer (404, 401, 5xx), or it answered and the governance property under test did not hold. Failed scenarios indicate governance gaps.
 
@@ -464,7 +500,7 @@ governancebench list --suite authorization       List one suite
 governancebench --help                           Full help
 ```
 
-**Flags -- run command:**
+**Flags, run command:**
 
 | Flag | Default | Description |
 |---|---|---|
@@ -478,7 +514,7 @@ governancebench --help                           Full help
 | `--format` | summary | Output format: summary, json, markdown |
 | `--output` | stdout | Write report to file |
 
-**Flags -- blind command:**
+**Flags, blind command:**
 
 | Flag | Default | Description |
 |---|---|---|
@@ -518,7 +554,7 @@ GovernanceBench is open source under the Apache License 2.0. Contributions are w
 
 When adding new scenarios, follow the existing suite structure in `suites/`. Each scenario must include an expected HTTP status code, a pass/skip/fail classification rule, and a label that appears in report output.
 
-Do not hand-write endpoint-absence escapes such as `if (r.status === 404) return { pass: true, reason: '... -- skipped' }`. That form tests nothing and cannot tell a third-party gap from a broken declared endpoint. Route absence through the shared helper instead:
+Do not hand-write endpoint-absence escapes such as `if (r.status === 404) return { pass: true, reason: '..., skipped' }`. That form tests nothing and cannot tell a third-party gap from a broken declared endpoint. Route absence through the shared helper instead:
 
 ```js
 import { requireEndpoint } from '../lib/endpoint-contract.mjs';
