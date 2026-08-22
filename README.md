@@ -144,7 +144,11 @@ GovernanceBench measures 6 dimensions:
 | Microsoft AGT | v3.6.0 | 57/100 | 2026-05-17 | microsoft-agt-governancebench-results.json |
 | n8n (bare) | latest | 56/100 | 2026-06-18 | live adapter (`run --adapter n8n`) |
 
-n8n is an open-source workflow orchestrator, not a governance platform, included to show what a general-purpose runtime scores against the bar: 56/100 (Insufficient), live-measured through the adapter. The same n8n governed through Agentomy reaches 100/100. Run it yourself with `run --adapter n8n`. Microsoft Agent 365 (preview) received a documentation-review assessment (2 of 4 dimensions), not a full live score.
+n8n is an open-source workflow orchestrator, not a governance platform, included to show what a general-purpose runtime scores against the bar: 56/100 (Insufficient), live-measured through the adapter. The same n8n governed through Agentomy reaches 100/100. Run it yourself with `run --adapter n8n`. Microsoft Agent 365 (preview) and the OpenAI Agents SDK received documentation-review assessments (2 of 4 and 1 of 4 dimensions respectively), not full live scores. The OpenAI Agents SDK documentation itself notes it is not a governance platform in the GovernanceBench sense.
+
+### Independent third-party validation
+
+Beyond our own GovernanceBench runs, we ran NVIDIA's [SkillSpector](https://github.com/NVIDIA/SkillSpector) v2.2.3, NVIDIA's own open (Apache-2.0) security scanner for AI agent skills, against Agentomy's skills. Result: **16 of 16 SAFE, 0 findings, 0/100 aggregate risk**. A different tool, from a different vendor, reaching an independent result. Anyone can reproduce it.
 
 ---
 
